@@ -1,0 +1,85 @@
+{include file="public/header" /}
+<div class="pd-20">
+  <div class="Huiform"> 
+    <form action="{:url('personal/save')}" method="post">
+        <!--隐藏的输入框，保存参数值-->
+        <input type="hidden" name="user_id" value="{$myInfo.user_id}">
+      <table class="table table-bg">
+        <tbody>
+           <tr>
+            <div class="row cl">
+                <th class="text-r">头像：</th>
+                <td class="formControls col-xs-8 col-sm-9">
+                  <input id="file_upload"  type="file"  multiple="true">
+                  <img  id="upload_org_code_img" src="{notempty name='$myInfo.logo'}{$myInfo.logo}
+                                    {else/}__DEFAULT_LOGO__{/notempty}" width="120" height="110">
+                  <input id="file_upload_image" name="logo" type="hidden" multiple="true" value="{$myInfo.logo}">
+                </td>
+            </div>
+          </tr>
+          <tr>
+            <th width="100" class="text-r"><span class="c-red">*</span> 用户名：</th>
+            <td><input type="text" style="width:200px" class="input-text" value="{$myInfo.username}" placeholder="" id="username" name="username" datatype="*2-16" nullmsg="用户名不能为空"></td>
+          </tr>
+          <tr>
+            <th width="100" class="text-r"><span class="c-red">*</span> 密码：</th>
+            <td><input type="text" style="width:200px" class="input-text" value="{$myInfo.password}" placeholder="" id="password" name="password" datatype="*2-16" nullmsg="密码不能为空"></td>
+          </tr>
+          <tr>
+            <th width="100" class="text-r">个性签名：</th>
+            <td><input type="text"  class="textarea radius" value="{$myInfo.signature}" id="signature" name="signature"  ></td>
+          </tr>
+          <tr>
+            <th class="text-r">性别：</th>
+            <td><label>
+                <input name="sex" type="radio" id="six_man" value="男" checked>
+                男</label>
+              <label>
+                <input name="sex" type="radio" id="six_woman" value="女">
+                女</label></td>
+          </tr>
+          <tr>
+            <th class="text-r">生日：</th>
+            <td><input type="text" style="width:300px" class="input-text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true,maxDate:'%y-%M-%d'})"  value="{$myInfo.date_of_birth}" placeholder="" id="date_of_birth" name="date_of_birth"></td>
+          </tr>
+          <tr>
+            <th class="text-r">手机：</th>
+            <td><input type="text" style="width:300px" class="input-text" value="{$myInfo.phone}" placeholder="" id="phone" name="phone"></td>
+          </tr>
+          <tr>
+            <th class="text-r">邮箱：</th>
+            <td><input type="text" style="width:300px" class="input-text" value="{$myInfo.email}" placeholder="" id="email" name="email"></td>
+          </tr>
+          <tr>
+            <th></th>
+            <td><button id="sm" class="btn btn-success radius" style="display:none"  type="submit"><i class="icon-ok"></i> 确定</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+      <div>
+        <button id="xg"  onclick="xiugai()" class="btn btn-primary radius" ><i class="icon-ok"></i> 修改</button>
+      </div>
+  </div>
+</div>
+
+{include file="public/footer" /}
+<script>
+    var SCOPE={
+        'uploadify_swf':'../../__STATIC__/admin/uploadify/uploadify.swf',
+        'image_upload':'{:url('api/image/upload')}'
+    };
+    $(function(){
+        $("#file_upload").hide();
+        $(":input").attr("disabled",true);
+        $("#xg").attr("disabled",false);
+    });
+    function xiugai(){
+        $(":input").attr("disabled",false);
+        $("#xg").hide();
+        $("#file_upload").show();
+        $("#sm").show();
+    }
+    
+</script>
+

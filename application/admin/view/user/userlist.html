@@ -1,0 +1,51 @@
+{include file="public/header" /}
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户管理 <span class="c-gray en">&gt;</span>{if condition='$status eq 1' }用户列表{else/}已删除用户{/if}<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="pd-20">  
+  <div class="cl pd-5 bg-1 bk-gray mt-20">
+    <span class="l">
+        <a href="javascript:;" onclick="o2o_del_checked('{:url('user/status',['status'=>$status])}')" class="btn btn-danger radius">
+            <i class="icon-trash"></i>批量删除
+        </a>
+        <a onclick="layer_show('添加用户','{:url('User/userAdd')}','','500')" class="btn btn-primary radius"><i class="icon-plus"></i>添加用户</a>
+    </span>    
+    <span class="r">共有数据：<strong>{$users_num}</strong> 条</span>
+    <!--获取数组数据注意带引号 ‘num’-->
+  </div>
+    
+  <table class="table table-border table-bordered table-hover table-bg table-sort">
+    <thead>
+      <tr class="text-c">
+        <th width="25"><input type="checkbox" name="" value=""></th>
+        <th width="80">ID</th>
+        <th width="100">用户名</th>
+        <th width="40">性别</th>
+        <th width="90">手机</th>
+        <th width="150">邮箱</th>
+        <th width="70">状态</th>
+        <th width="100">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+        {volist name='users' id='vo'}
+           <tr class="text-c">
+             <td><input type="checkbox" value="{$vo.user_id}" name="checkbox" id='checkbox'></td>
+             <td>{$vo.user_id}</td>
+             <td><u style="cursor:pointer" class="text-primary" onclick="layer_show('查看详情','{:url('user/userDetails',['user_id'=>$vo.user_id])}','680','500')">{$vo.username}</u></td>
+             <td>{$vo.sex}</td>
+             <td>{$vo.phone}</td>
+             <td>{$vo.email}</td>
+             <td class="user-status">{$vo.status|status}</td>
+             <td class="td-manage"> 
+                 <a data-toggle="tooltip" data-placement="bottom" title="查看详情" href="javascript:;" onclick="layer_show('查看详情','{:url('user/userDetails',['user_id'=>$vo.user_id])}','680','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe685;</i></a> 
+                 <a data-toggle="tooltip" data-placement="top" title="修改" href="javascript:;" onClick="layer_show('修改','{:url('user/userEdit',['user_id'=>$vo.user_id])}','','500')" class="ml-5"  style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> 
+                 <a data-toggle="tooltip" data-placement="bottom" title="删除" href="javascript:;" onclick="o2o_del('{:url('user/status',['user_id'=>$vo.user_id,'status'=>$vo.status==1?-1:1])}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+            </td>
+           </tr>
+      {/volist}
+    </tbody>
+  </table>
+</div>
+{:pagination($users)}
+{include file="public/footer" /}
+

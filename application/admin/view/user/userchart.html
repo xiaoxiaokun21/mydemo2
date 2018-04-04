@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery/1.9.1/jquery.min.js"></script>  
+<script type="text/javascript" src="__STATIC__/admin/js/echarts.js"></script> 
+<title>后台管理</title>
+</head>
+<body>
+    <div style="overflow: hidden">
+    <div id="echarts_post" style="width:300px;height:300px;float:left;"></div>
+    <div id="echartsPie" style="width: 600px;height:300px;float:left;"></div>
+    </div>
+</body>
+<script type="text/javascript">
+        $(function(){
+            var url="{:url('api/user/getUsersProportion')}";
+            var postData={};
+            //抛送请求
+            $.post(url,postData,function(result){
+                if(result.status==1){
+                    //获取数据
+                    data=result.data;
+                    postChart(data); 
+                }else if(result.status==0){
+                    
+                }
+            },"json");
+        }); 
+        
+    function postChart(data){ 
+        //---1.柱状图
+            var myChart = echarts.init(document.getElementById('echarts_post'));   
+            var option = {  
+                title : {  
+                    text: '男女比例统计',  
+                },  
+                tooltip : {  
+                    trigger: ''  
+                },  
+                legend: {  
+                    data:["男生","女生"]  
+                },  
+
+                calculable : true,  
+                xAxis : [  
+                    {  
+                        type : 'category',  
+                        data : ["男生","女生"],  
+                    }  
+                ],  
+                yAxis :{},
+                series : [  
+                    {  
+                        name:'人数',  
+                        type:'bar',  
+                        data:[data[0].manNum,data[0].womanNum],  
+                    },  
+
+                ]  
+            };  
+            myChart.setOption(option);   
+        //---2.饼状图
+            var echartsPie = echarts.init(document.getElementById('echartsPie')); 
+            var json = [  
+                        {value:data[0].manPro*100,name:'男'},  
+                        {value:data[0].womanPro*100,name:'女'}
+                        ];
+            var option2 = {  
+                    title : {  
+                        text: '男女比例分布',   
+                        x:'center'  
+                    },  
+                    tooltip : {  
+                        trigger: 'item',  
+                        formatter: "{a} <br/>{b} : {c}%"  
+                    },  
+                    legend: {  
+                        orient : 'vertical',  
+                        x : 'left',  
+                        data:['男','女']  
+                    },  
+                    toolbox: {  
+                        show : true,  
+                        feature : {  
+                            mark : {show: true},  
+                            dataView : {show: true, readOnly: false},  
+                            magicType : {  
+                                show: true,   
+                                type: ['pie', 'funnel'],  
+                                option: {  
+                                    funnel: {  
+                                        x: '25%',  
+                                        width: '50%',  
+                                        funnelAlign: 'left',  
+                                        max: 1548  
+                                    }  
+                                }  
+                            },  
+                            restore : {show: true},  
+                            saveAsImage : {show: true}  
+                        }  
+                    },  
+                    calculable : true,  
+                    series : [  
+                        {  
+                            name:'性别',  
+                            type:'pie',  
+                            radius : '50%',//饼图的半径大小  
+                            center: ['50%', '50%'],//饼图的位置  
+                            data:json
+                        }  
+                    ]  
+                }; 
+                echartsPie.setOption(option2);
+}  
+</script>
+</html>
